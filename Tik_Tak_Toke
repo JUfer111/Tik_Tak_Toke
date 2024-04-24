@@ -1,0 +1,79 @@
+import random
+import colorama
+
+red = colorama.Fore.RED
+blue = colorama.Fore.BLUE
+yellow = colorama.Fore.YELLOW
+reset = colorama.Style.RESET_ALL
+def ultra_color(ultra_text):
+    all_colors = [red, blue, yellow]
+
+    for i in ultra_text:
+        print(f'{random.choice(all_colors)}{i}', end='')
+    print(f'{reset}')
+
+def numbers():
+    chisla = []
+    for i in range(1, 10):
+        chisla.append(str(i))
+    return chisla
+
+def board(numers):
+    print()
+    print(f'{red}  |  {reset}'.join(numers[0: 3]))
+    ultra_color('-------------')
+    print(f'{blue}  |  {reset}'.join(numers[3: 6]))
+    ultra_color('-------------')
+    print(f'{yellow}  |  {reset}'.join(numers[6: 9]))
+    print()
+
+# win_streak = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [6,4,2]]
+def win(numbers, player):
+    for i in range(0, 9, 3):
+        if numbers[i] == numbers[i + 1] == numbers[i + 2]:
+            print(f'{player}', end=' ')
+            ultra_color(f'Победил')
+            return True
+    for i in range(0, 3):
+        if numbers[i] == numbers[i + 3] == numbers[i + 6]:
+            print(f'{player}', end=' ')
+            ultra_color(f'Победил')
+            return True
+    if numbers[0] == numbers[4] == numbers[8]:
+        print(f'{player}', end=' ')
+        ultra_color(f'Победил')
+        return True
+    elif numbers[6] == numbers[4] == numbers[2]:
+        print(f'{player}', end=' ')
+        ultra_color(f'Победил')
+        return True
+    return False
+
+def check(numer, choice):
+    if choice in numer:
+        return True
+    else:
+        return False
+
+def main():
+    number = numbers()
+    board(numers=number)
+    symbols = [f'{blue}X{reset}', f'{red}0{reset}']
+    cur_player = symbols[0]
+    while win(numbers=number, player=cur_player) == False:
+        print(f'Ход игрока {cur_player}')
+        choice1 = input('Введите клетку куда хотите сходить(1-9): ')
+        check1 = check(numer=number, choice=choice1)
+        while check1 == False:
+            choice1 = input('Введите клетку куда хотите сходить(1-9): ')
+            check1 = check(numer=number, choice=choice1)
+        number[int(choice1) - 1] = cur_player
+        board(numers=number)
+        if win(numbers=number, player=cur_player) == True:
+            break
+        if cur_player == symbols[0]:
+            cur_player = symbols[1]
+        else:
+            cur_player = symbols[0]
+
+main()
